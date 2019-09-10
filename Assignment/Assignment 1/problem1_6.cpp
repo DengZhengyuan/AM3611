@@ -4,8 +4,7 @@
     DATA:   Sept. 9, 2019
     PROB #: problem 1.6
     DESCRIPTION: 
-            input the given name and family name
-            print out the full name
+            calculate the average value of an array
     CMD:    g++ problem1_6.cpp -o problem1_6 && ./problem1_6
 */
 

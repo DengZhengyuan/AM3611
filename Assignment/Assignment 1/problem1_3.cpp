@@ -23,7 +23,7 @@ double dot_production(double *array_1, double *array_2)
     }
     else
     {
-        std::cout << "ERROR: the sizes of vectors x and y are different. ";
+        std::cerr << "ERROR: the sizes of vectors x and y are different. ";
     }
     return result;
 }
