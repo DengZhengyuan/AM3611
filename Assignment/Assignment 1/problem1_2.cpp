@@ -6,7 +6,7 @@
     DESCRIPTION: 
             enter two integers from the keyboard and then print 
             out the product of these integers.
-    CMD:    g++ problem1_2.cpp -o problem1_2 && ./problem1_2
+    CMD:    g++ problem1_2.cpp -o problem1_2.out && ./problem1_2.out
 */
 
 #include <iostream>

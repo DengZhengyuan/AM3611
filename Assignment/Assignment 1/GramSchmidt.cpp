@@ -6,7 +6,7 @@
     DESCRIPTION: 
             solve a system of linear equations by 
             Gram-Schmidt process
-    CMD:    g++ GramSchmidt.cpp -o GramSchmidt && ./GramSchmidt
+    CMD:    g++ GramSchmidt.cpp -o GramSchmidt.out && ./GramSchmidt.out
 */
 
 #include <iostream>

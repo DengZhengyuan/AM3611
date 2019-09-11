@@ -6,7 +6,7 @@
     DESCRIPTION: 
             input the given name and family name
             print out the full name
-    CMD:    g++ problem1_5.cpp -o problem1_5 && ./problem1_5
+    CMD:    g++ problem1_5.cpp -o problem1_5.out && ./problem1_5.out
 */
 
 #include <iostream>

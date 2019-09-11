@@ -6,7 +6,7 @@
     DESCRIPTION: 
             calculate the dot production of two vectors, 
             calculate the Euclidean norm of vector
-    CMD:    g++ problem1_3.cpp -o problem1_3 && ./problem1_3
+    CMD:    g++ problem1_3.cpp -o problem1_3.out && ./problem1_3.out
 */
 
 #include <iostream>

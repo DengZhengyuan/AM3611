@@ -5,7 +5,7 @@
     PROB #: problem 1.6
     DESCRIPTION: 
             calculate the average value of an array
-    CMD:    g++ problem1_6.cpp -o problem1_6 && ./problem1_6
+    CMD:    g++ problem1_6.cpp -o problem1_6.out && ./problem1_6.out
 */
 
 #include <iostream>
