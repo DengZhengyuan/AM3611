@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <cmath>
+#include <cassert> // assert
 
 /* ---------------------------------------------- */
 /*                   FUNCTIONS                    */
@@ -24,6 +25,10 @@ double Euclidean_norm(int size, double *array);
 
 // the projection of vec_a onto vec_u
 double *projection(int size, double *vec_u, double *vec_a);
+
+// calculate the determinate of a matrix
+// now only two dimensions matrix can be calculated
+double determinate(int size, double **matrix);
 
 // transpose a square matrix and calculate the
 // production of it and a vector
@@ -51,8 +56,8 @@ int main(int argc, char *argv[])
 
     // input the size of matrix A
     int size;
-    std::cout << "Please enter the dimension of matrix A. \n ";
-    std::cout << "(If A is a (2x2) matrix, please enter 2). \n ";
+    std::cout << "Please enter the dimension of matrix A. \n";
+    std::cout << "(If A is a (2x2) matrix, please enter 2). \n";
     std::cin >> size;
     std::cout << "\n";
 
@@ -60,8 +65,8 @@ int main(int argc, char *argv[])
     double **A;
     A = create_a_square_matrix(size);
     std::cout << "Please enter the all elements of matrix A. \n";
-    std::cout << "(Please enter the column vector in turn). \n ";
-    std::cout << "(For this problem, please enter 3 1 7 9). \n ";
+    std::cout << "(Please enter the column vector in turn). \n";
+    std::cout << "(For this problem, please enter 3 1 7 9). \n";
     for (int i = 0; i < size; i++)
     {
         for (int j = 0; j < size; j++)
@@ -71,7 +76,11 @@ int main(int argc, char *argv[])
     }
     std::cout << "\n";
 
-    // here should assert if A is singular.
+    // assert if A is singular.
+    double det_A; 
+    det_A = determinate(size, A);
+    assert(det_A != 0); 
+
 
     /* ----------- Matrix U, Q, and R ----------- */
 
@@ -122,11 +131,20 @@ int main(int argc, char *argv[])
         }
     }
 
-    delete_matrix(size, A);
-
+    // calculate the Q times R, and check it with A
     double **QR;
     QR = create_a_square_matrix(size);
     QR = matrix_x_matrix(size, Q, R);
+
+    double **QR_err; 
+    QR_err = create_a_square_matrix(size); 
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j < size; j++)
+        {
+            QR_err[i][j] = (QR[i][j] - A[i][j]) / A[i][j];
+        }
+    }
 
     // print out the matrix Q, R and QR
     {
@@ -135,7 +153,7 @@ int main(int argc, char *argv[])
         {
             for (int j = 0; j < size; j++)
             {
-                std::cout << Q[j][i] << "  ";
+                std::cout << Q[j][i] << "\t";
             }
             std::cout << "\n";
         }
@@ -149,11 +167,11 @@ int main(int argc, char *argv[])
             {
                 if (j < (i + 1))
                 {
-                    std::cout << R[i][j] << "  ";
+                    std::cout << R[i][j] << "\t";
                 }
                 else
                 {
-                    std::cout << 0 << "        ";
+                    std::cout << 0 << "\t";
                 }
             }
             std::cout << "\n";
@@ -165,12 +183,25 @@ int main(int argc, char *argv[])
         {
             for (int j = 0; j < size; j++)
             {
-                std::cout << QR[j][i] << "  ";
+                std::cout << QR[j][i] << "\t";
+            }
+            std::cout << "\n";
+        }
+        std::cout << "\n";
+
+        std::cout << "Comparing with A, the relative error of QR is " << std::endl;
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                std::cout << QR_err[j][i] << "\t";
             }
             std::cout << "\n";
         }
         std::cout << "\n";
     }
+
+    delete_matrix(size, A);
 
     /* ------------ Vector b ------------ */
 
@@ -229,13 +260,14 @@ int main(int argc, char *argv[])
     std::cout << "\n";
 
     // check the relative errores 
-    std::cout << "For this problem, the real results are \n";
-    std::cout << "-1.75 and 0.75. The relative errores are \n";
+    std::cout << "The norm of relative error for this problem is \n"; 
     double real_x_0 = -1.75, 
-           real_x_1 = 0.75;
-    std::cout << (final_result[0] - real_x_0) / real_x_0
-              << "\n";
-    std::cout << (final_result[1] - real_x_1) / real_x_1
+           real_x_1 = 0.75, 
+           norm_of_err = 0.; 
+           norm_of_err = sqrt(
+                    pow((final_result[0] - real_x_0) / real_x_0, 2) +
+                    pow((final_result[1] - real_x_1) / real_x_1, 2));
+    std::cout << norm_of_err
               << "\n";
 
     delete[] final_result;
@@ -355,4 +387,32 @@ double **matrix_x_matrix(int size, double **m_1, double **m_2)
     }
 
     return result_m;
+}
+
+double determinate(int size, double **matrix)
+{
+    double det;
+    if (size == 2)
+    {
+        det =
+            matrix[0][0] * matrix[1][1] -
+            matrix[1][0] * matrix[0][1];
+    }
+    else if (size == 3)
+    {
+        det =
+            matrix[0][0] * matrix[1][1] * matrix[2][2] +
+            matrix[1][0] * matrix[2][1] * matrix[0][2] +
+            matrix[2][0] * matrix[0][1] * matrix[1][2] -
+            matrix[2][0] * matrix[1][1] * matrix[0][2] -
+            matrix[1][0] * matrix[0][1] * matrix[2][2] -
+            matrix[0][0] * matrix[2][1] * matrix[2][1];
+    }
+    else
+    {
+        det = 1;
+        std::cout << "Determinant returns 1 when the dimension is larger than 3.";
+    }
+
+    return det;
 }
