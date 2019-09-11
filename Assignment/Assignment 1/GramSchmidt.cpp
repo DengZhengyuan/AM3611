@@ -1,10 +1,11 @@
 /* 
     NAME:   Zhengyuan Deng
     STU #:  251006745
-    DATA:   Sept. 9, 2019
+    DATA:   Sept. 10, 2019
     PROB #: Assignment 1 Part B
     DESCRIPTION: 
-            calculate the average value of an array
+            solve a system of linear equations by 
+            Gram-Schmidt process
     CMD:    g++ GramSchmidt.cpp -o GramSchmidt && ./GramSchmidt
 */
 
@@ -60,6 +61,7 @@ int main(int argc, char *argv[])
     A = create_a_square_matrix(size);
     std::cout << "Please enter the all elements of matrix A. \n";
     std::cout << "(Please enter the column vector in turn). \n ";
+    std::cout << "(For this problem, please enter 3 1 7 9). \n ";
     for (int i = 0; i < size; i++)
     {
         for (int j = 0; j < size; j++)
@@ -225,6 +227,17 @@ int main(int argc, char *argv[])
                   << "\n";
     }
     std::cout << "\n";
+
+    // check the relative errores 
+    std::cout << "For this problem, the real results are \n";
+    std::cout << "-1.75 and 0.75. The relative errores are \n";
+    double real_x_0 = -1.75, 
+           real_x_1 = 0.75;
+    std::cout << (final_result[0] - real_x_0) / real_x_0
+              << "\n";
+    std::cout << (final_result[1] - real_x_1) / real_x_1
+              << "\n";
+
     delete[] final_result;
 
     return 0;
