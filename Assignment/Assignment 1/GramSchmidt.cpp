@@ -77,9 +77,7 @@ int main(int argc, char *argv[])
     std::cout << "\n";
 
     // assert if A is singular.
-    double det_A; 
-    det_A = determinate(size, A);
-    assert(det_A != 0); 
+    assert(determinate(size, A) != 0); 
 
 
     /* ----------- Matrix U, Q, and R ----------- */
@@ -132,9 +130,28 @@ int main(int argc, char *argv[])
     }
 
     // calculate the Q times R, and check it with A
-    double **QR;
+    double **QR, **R_square;
     QR = create_a_square_matrix(size);
-    QR = matrix_x_matrix(size, Q, R);
+    R_square = create_a_square_matrix(size);
+
+    // change the data structure of R from upper triangle 
+    // matrix to square matrix
+    for (int j = 0; j < size; j++)
+    {
+        for (int i = 0; i < size; i++)
+        {
+            if (j < (i + 1))
+            {
+                R_square[i][j] = R[i][j];
+            }
+            else
+            {
+                R_square[i][j] = 0 ;
+            }
+        }
+    }
+
+    QR = matrix_x_matrix(size, Q, R_square);
 
     double **QR_err; 
     QR_err = create_a_square_matrix(size); 
@@ -161,18 +178,11 @@ int main(int argc, char *argv[])
 
         // print out the matrix R
         std::cout << "The matrix R is " << std::endl;
-        for (int j = 0; j < size; j++)
+        for (int i = 0; i < size; i++)
         {
-            for (int i = 0; i < size; i++)
+            for (int j = 0; j < size; j++)
             {
-                if (j < (i + 1))
-                {
-                    std::cout << R[i][j] << "\t";
-                }
-                else
-                {
-                    std::cout << 0 << "\t";
-                }
+                std::cout << R_square[j][i] << "\t";
             }
             std::cout << "\n";
         }
@@ -189,7 +199,8 @@ int main(int argc, char *argv[])
         }
         std::cout << "\n";
 
-        std::cout << "Comparing with A, the relative error of QR is " << std::endl;
+        std::cout << "Comparing with A, the relative error of QR is " 
+                  << std::endl;
         for (int i = 0; i < size; i++)
         {
             for (int j = 0; j < size; j++)
@@ -201,7 +212,18 @@ int main(int argc, char *argv[])
         std::cout << "\n";
     }
 
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j < size; j++)
+        {
+            assert(QR_err[i][j] < pow(10, -6));
+        }
+    }
+
     delete_matrix(size, A);
+    delete_matrix(size, QR);
+    delete_matrix(size, QR_err);
+    delete_matrix(size, R_square);
 
     /* ------------ Vector b ------------ */
 
@@ -227,7 +249,8 @@ int main(int argc, char *argv[])
     double *final_result;
     final_result = new double[size];
 
-    double R_x, numerator;
+    double R_x = 0., 
+           numerator = 0.;
     for (int i = (size - 1); i >= 0; i--)
     {
         if (i == (size - 1))
@@ -323,15 +346,12 @@ double *matrixT_x_vector(int size, double **matrix, double *vector)
 {
     double *result_vec;
     result_vec = new double[size];
-    double sum = 0.;
     for (int i = 0; i < size; i++)
     {
         for (int j = 0; j < size; j++)
         {
-            sum += matrix[i][j] * vector[j];
+            result_vec[i] += matrix[i][j] * vector[j];
         }
-        result_vec[i] = sum;
-        sum = 0.;
     }
     return result_vec;
 }
@@ -370,19 +390,15 @@ void delete_matrix(int size, double **matrix)
 double **matrix_x_matrix(int size, double **m_1, double **m_2)
 {
     double **result_m;
-    result_m = create_a_square_matrix(size);
-    double sum = 0.;
-
+    result_m = create_a_square_matrix(size); 
     for (int i = 0; i < size; i++)
     {
         for (int j = 0; j < size; j++)
         {
             for (int k = 0; k < size; k++)
             {
-                sum += m_1[k][j] * m_2[i][k];
+                result_m[i][j] += m_1[k][j] * m_2[i][k];
             }
-            result_m[i][j] = sum;
-            sum = 0.;
         }
     }
 
@@ -391,7 +407,7 @@ double **matrix_x_matrix(int size, double **m_1, double **m_2)
 
 double determinate(int size, double **matrix)
 {
-    double det;
+    double det = 0.;
     if (size == 2)
     {
         det =
@@ -406,7 +422,7 @@ double determinate(int size, double **matrix)
             matrix[2][0] * matrix[0][1] * matrix[1][2] -
             matrix[2][0] * matrix[1][1] * matrix[0][2] -
             matrix[1][0] * matrix[0][1] * matrix[2][2] -
-            matrix[0][0] * matrix[2][1] * matrix[2][1];
+            matrix[0][0] * matrix[2][1] * matrix[1][2];
     }
     else
     {
