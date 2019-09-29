@@ -11,6 +11,7 @@
 #include <iostream>
 #include <fstream>
 #include <cassert>
+#include <cstdlib>
 
 /*---------------------------------------*/
 /*               functions               */
@@ -18,30 +19,48 @@
 
 // the production of a matrix and a vector
 double *matrix_x_vector(int size, double **matrix, double *vector);
-
+// create a square matrix
 double **create_a_square_matrix(int size);
-
+// release the memroy of matrix
 void delete_matrix(int size, double **matrix);
 
 
 /*---------------------------------------*/
 /*             main function             */
 /*---------------------------------------*/
-int main(int argc, char const *argv[])
+int main(int argc, char *argv[])
 {
-    int size = 3;
+    int size = 3,
+        Number_of_command_line_arguments = 0;
+
+    // test the number of command line argument
+    for (int i = 0; i < argc; i++)
+    {
+        Number_of_command_line_arguments = (i + 1);
+    }
+    if (Number_of_command_line_arguments != 3)
+    {
+        std::cerr << "The number of command line arguments is incorrect.\n";
+        std::cerr << "Please input the data file name (.dat) and the number of nodes after './EulerMethod.out'. \n";
+        return 1;
+    }
     
-    double **A, *Ay;
+    // define the variables in Euler method
+    double **A, 
+           *Ay;
     A = create_a_square_matrix(size);
     Ay = new double[size];
-    
+
     double y[size],
            x = 0,
-           h,
-           N;
+           h;
+
+    // read the data file and the number of nodes
+    std::string data_file_name = argv[1]; 
+    double N = atof(argv[2]); 
     
     // read the A and y0
-    std::ifstream read_file("data.dat");
+    std::ifstream read_file(data_file_name);
     assert(read_file.is_open());
     for (int i = 0; i < (size+1); i++)
     {
@@ -52,8 +71,12 @@ int main(int argc, char const *argv[])
         else
             read_file >> y[0] >> y[1] >> y[2];
     }
+
+    assert((N > 1)); 
+    h = 1 / (N-1.);
     
-    std::ofstream write_file("xy.dat");
+    // write the initial value to the results file
+    std::ofstream write_file("xy_test.dat");
     write_file.precision(10);
     write_file << x << " ";
     for (int i = 0; i < size; i++)
@@ -63,11 +86,7 @@ int main(int argc, char const *argv[])
     write_file << "\n";
     write_file.flush();
     
-    
-    std::cout << "Please enter the N value. " << std::endl;
-    std::cin >> N;
-    h = 1 / (N-1);
-    
+    // calculate the results and write them to the file
     for (int j = 0; j < (N-1); j++)
     {
         Ay = matrix_x_vector(size, A, y);
@@ -88,9 +107,10 @@ int main(int argc, char const *argv[])
         write_file.flush();
     }
     
-    
+    // close the file
     write_file.close();
     
+    // release the memory
     delete_matrix(size, A);
     delete[] Ay;
     
