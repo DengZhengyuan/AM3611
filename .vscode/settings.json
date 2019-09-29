@@ -1,5 +1,6 @@
 {
     "cSpell.ignoreWords": [
         "zhengyuan"
-    ]
+    ],
+    "C_Cpp.errorSquiggles": "Disabled"
 }

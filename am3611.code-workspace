@@ -66,7 +66,12 @@
 			"utility": "cpp",
 			"vector": "cpp",
 			"numeric": "cpp",
-			"iomanip": "cpp"
-		}
+			"iomanip": "cpp",
+			"cassert": "cpp",
+			"fstream": "cpp"
+		},
+		"editor.tabSize": 2,
+		"editor.fontLigatures": true,
+		"editor.fontFamily": "Fira Code, Menlo, Monaco, 'Courier New', monospace"
 	}
 }
