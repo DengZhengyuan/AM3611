@@ -15,7 +15,10 @@ int main(int argc, char const *argv[]) {
   double p, q, x, y;
   int j;
 
-  if(u >= q && j == 20)
+  std::cout << "Please enter the 'p', 'q', ‘y’, and 'j'. \n";
+  std::cin >> p >> q >> y >> j; 
+
+  if(y >= q && j == 20)
   {
     x = 5;
   }
@@ -24,5 +27,7 @@ int main(int argc, char const *argv[]) {
     x = p;
   }
   
+  std::cout << "x = " << x << std::endl;
+
   return 0;
 }

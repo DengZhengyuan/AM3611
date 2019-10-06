@@ -21,7 +21,7 @@
 double *matrix_x_vector(int size, double **matrix, double *vector);
 // create a square matrix
 double **create_a_square_matrix(int size);
-// release the memroy of matrix
+// release the memory of matrix
 void delete_matrix(int size, double **matrix);
 
 
@@ -30,6 +30,7 @@ void delete_matrix(int size, double **matrix);
 /*---------------------------------------*/
 int main(int argc, char *argv[])
 {
+    /*--------- Command line argument part ---------*/
     int size = 3,
         Number_of_command_line_arguments = 0;
 
@@ -58,7 +59,11 @@ int main(int argc, char *argv[])
     // read the data file and the number of nodes
     std::string data_file_name = argv[1]; 
     double N = atof(argv[2]); 
+
+    assert((N > 1)); 
+    h = 1 / (N-1.);
     
+    /*------------ Read the file part ------------*/
     // read the A and y0
     std::ifstream read_file(data_file_name);
     assert(read_file.is_open());
@@ -71,9 +76,6 @@ int main(int argc, char *argv[])
         else
             read_file >> y[0] >> y[1] >> y[2];
     }
-
-    assert((N > 1)); 
-    h = 1 / (N-1.);
     
     // write the initial value to the results file
     std::ofstream write_file("xy_test.dat");
@@ -86,6 +88,7 @@ int main(int argc, char *argv[])
     write_file << "\n";
     write_file.flush();
     
+    /*--------- Calculation and write the results part ---------*/
     // calculate the results and write them to the file
     for (int j = 0; j < (N-1); j++)
     {

@@ -15,6 +15,9 @@ int main(int argc, char const *argv[]) {
   double p, q, x, y;
   int j;
 
+  std::cout << "Please enter the 'p', 'q', and 'j'. \n";
+  std::cin >> p >> q >> j; 
+
   if(p < q)
   {
     x = 0;
@@ -28,5 +31,7 @@ int main(int argc, char const *argv[]) {
     x = 2;
   }
   
+  std::cout << "x = " << x << std::endl;
+
   return 0;
 }

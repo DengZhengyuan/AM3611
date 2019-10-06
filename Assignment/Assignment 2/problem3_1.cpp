@@ -16,13 +16,15 @@ int main(int argc, char const *argv[])
   double x[4] = {0.0, 1.0, 1.0, 0.0};
   double y[4] = {0.0, 0.0, 1.0, 1.0};
   char char_judge;
+  bool bool_judge;
 
   std::ifstream read_file("x_and_y.dat");
-  read_file.is_open();
+  bool_judge = read_file.is_open();
+  read_file.close();
 
-  if (read_file.is_open())
+  if (bool_judge == 1)
   {
-    std::cout << "Overwrite the file? [y/n] \n"
+    std::cout << "\nWarning: 'x_and_y.data' exists, overwrite the file? [y/n]"
               << std::endl;
     std::cin >> char_judge;
     if (char_judge == 'y' || char_judge == 'Y')
@@ -76,7 +78,7 @@ int main(int argc, char const *argv[])
       write_file.close();
     }
   }
-  else
+  else if (bool_judge == 0)
   {
     std::ofstream write_file("x_and_y.dat");
     {
@@ -101,7 +103,6 @@ int main(int argc, char const *argv[])
     // close the file
     write_file.close();
   }
-  read_file.close();
 
   return 0;
 }

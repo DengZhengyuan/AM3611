@@ -15,11 +15,16 @@ int main(int argc, char const *argv[])
 {
   double p, q, x, y;
   int j;
+
+  std::cout << "Please enter the 'p', 'q', and 'j'. \n";
+  std::cin >> p >> q >> j; 
   
   if(p >= q || j != 10)
   {
     x = 5; 
   }
+
+  std::cout << "x = " << x << std::endl;
 
   return 0;
 }

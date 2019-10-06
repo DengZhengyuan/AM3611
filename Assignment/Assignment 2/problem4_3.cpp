@@ -32,6 +32,8 @@ void delete_matrix(int size, double **matrix)
 
 int main(int argc, char const *argv[])
 {
+  // for loop to test whether the memroy is release
+   for (int i = 0; i < 100000000; i++) {
   int size = 2;
   double **A, 
          **B, 
@@ -58,19 +60,19 @@ int main(int argc, char const *argv[])
     }
   }
 
-  for (int i = 0; i < size; i++)
-  {
-    for (int j = 0; j < size; j++)
-    {
-      std::cout << C[i][j] << "\t";
-    }
-    std::cout << "\n";
-  }
-  std::cout << "\n";
+//  for (int i = 0; i < size; i++)
+//  {
+//    for (int j = 0; j < size; j++)
+//    {
+//      std::cout << C[i][j] << "\t";
+//    }
+//    std::cout << "\n";
+//  }
+//  std::cout << "\n";
 
   delete_matrix(size, A);
   delete_matrix(size, B);
   delete_matrix(size, C); 
-
+   }
   return 0;
 }

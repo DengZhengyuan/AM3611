@@ -25,9 +25,12 @@ int main(int argc, char const *argv[])
   *p_k = i; 
   *p_j = 0; 
 
-  std::cout << "The value of i = " << i << std::endl;
-  std::cout << "The value pointed to by p_j = " << *p_j << std::endl;
-  std::cout << "The value pointed to by p_k = " << *p_k << std::endl;
+  std::cout << "The value of i = " 
+            << i << std::endl;
+  std::cout << "The value pointed to by p_j = " 
+            << *p_j << std::endl;
+  std::cout << "The value pointed to by p_k = " 
+            << *p_k << std::endl;
 
   delete p_k;
   

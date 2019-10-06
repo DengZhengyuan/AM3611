@@ -70,8 +70,9 @@
 			"cassert": "cpp",
 			"fstream": "cpp"
 		},
-		"editor.tabSize": 2,
 		"editor.fontLigatures": true,
-		"editor.fontFamily": "Fira Code, Menlo, Monaco, 'Courier New', monospace"
+		"editor.fontFamily": "Fira Code, Menlo, Monaco, 'Courier New', monospace",
+		"editor.fontSize": 14,
+		"editor.wordWrap": "bounded"
 	}
 }
