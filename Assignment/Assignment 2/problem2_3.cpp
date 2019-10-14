@@ -22,11 +22,11 @@ int main(int argc, char *argv[])
   
   do {
     std::cin >> data;
-    if(data >= 0)
+    if (data >= 0)
     {
       sum += data;
     }
-    else if(data != -1)
+    else if (data != -1)
     {
       std::cout << "\nYou entered the wrong number, the sum has been reset. \n";
       sum = 0;
