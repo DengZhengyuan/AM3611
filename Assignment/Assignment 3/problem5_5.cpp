@@ -19,7 +19,6 @@ void release_the_matrix(int row, double **mat);
 
 // calculate the multiply of
 // 1) matrix with matrix
-// Arguments: 
 double **Multiply(int mat_1_r, int mat_1_c, double **mat_1,
                   int mat_2_r, int mat_2_c, double **mat_2);
 // 2) vector with matrix
@@ -34,6 +33,8 @@ double **Multiply(double scalar,
 // 5) matrix with scalar
 double **Multiply(int mat_r, int mat_c, double **mat,
                   double scalar);
+// _r and _c represent the row and the column, respectively
+// mat and vec represent the matrix and vector, respectively
 
 int main(int argc, char const *argv[]) {
     int chose;
