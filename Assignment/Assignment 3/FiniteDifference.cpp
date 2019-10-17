@@ -12,6 +12,7 @@
 #include <cassert>
 #include <fstream>
 #include <cmath>
+#include <string>
 
 // create a matrix by the size of (row x column)
 double** create_a_matrix(int row, int column);
@@ -25,86 +26,84 @@ double** tri_banded_matrix(int size, double value_a, double value_b);
 void release_the_matrix(double **mat);
 
 // console out a square matrix or a vector
-void print_m_v(int size, double **mat);
+void print_m_v(int row, int col, double **mat);
 void print_m_v(int size, double *vec);
 
 // decompose a symmetric positive definite matrix by Cholesky
 double** Cholesky_decomposition(int size, double **A);
 
 // forward substitution
-double* forward_substitution(int size, double **Cholesky, double *b);
+double* forward_substitution(int size, double **Cholesky, const double *b);
 
 // backward substitution
-double* backward_substitution(int size, double **Cholesky, double *b);
+double* backward_substitution(int size, double **Cholesky, const double *b);
 
 // package the Cholesky_decomposition, forward substitution, and
 // backward substitution.
 // And gives the final solutions of a linear system
 double* solve_linear_by_Cholesky(int size, double **A, double *b);
 
+void write_files(const std::string& name, double **mat, int row, int col);
+
+/* --------------------------------------------------------------------------- */
+/*                                main functions                               */
+/* --------------------------------------------------------------------------- */
+
 int main(int argc, char const *argv[])
 {
     const double PI = atan(1.0)*4;
 
     int nodes = 101;
-    double time_steps = 50;
+    int time_steps = 50;
     double time = 2;
     double h = 1./(nodes-1.);
-    double k = time / (time_steps-1);
+    double k = time / (time_steps-1.);
     double alpha = 1 / pow(PI, 2);
     double a = - (alpha*k) / pow(h, 2);
     double b = (2*alpha*k)/pow(h, 2) + 1;
 
-    double **A;
+    double **A, **matrix;
     A = tri_banded_matrix((nodes-2), a, b);
+    matrix = create_a_matrix((time_steps+1), (nodes-2));
 
-    double* initial_U;
-    initial_U = new double [nodes];
-    for (int i = 0; i < nodes; i++)
-    {
-        if (i == 0 || i == (nodes-1)) {
-            initial_U[i] = 0;
+    // initial conditions
+    for (int i = 0; i < (nodes-2); i++) {
+            matrix[0][i] = (1 / pow(PI, 2)) * sin(PI*(i+1)*h);
+    }
+
+    // calculation
+    for (int i = 0; i < (time_steps+1); i++) {
+        matrix[i+1] = solve_linear_by_Cholesky((nodes-2), A, matrix[i]);
+    }
+
+    double **final_results;
+    final_results = create_a_matrix((time_steps+1), nodes);
+    for (int i = 0; i < (time_steps + 1); i++) {
+        for (int j = 0; j < nodes; j++) {
+            if (j == 0 || j == (nodes-1)) {
+                final_results[i][j] = 0;
+            }
+            else {
+                final_results[i][j] = matrix[i][j-1];
+            }
         }
-        else {
-            initial_U[i] = (1 / pow(PI, 2)) * sin(PI * i * h);
-        }
     }
-    // write the initial U to the file
-    std::ofstream write_initial("matrix.dat");
-    for (int i = 0; i < nodes; i++) {
-        write_initial << initial_U[i] << " ";
-    }
-    write_initial << "\n";
-    write_initial.close();
+//    print_m_v(time_steps+1, nodes, final_results);
 
-    double *matrix_U1, *matrix_U2;
-    matrix_U1 = new double [nodes-2];
-    for (int i = 0; i < (nodes-1); i++)
-    {
-        matrix_U1[i] = initial_U[i+1];
-    }
 
-    std::ofstream write_file("matrix.dat", std::ios::app);
-    for (int j = 0; j < time_steps; j++) {
-        matrix_U2 = solve_linear_by_Cholesky((nodes-2), A, matrix_U1);
-        // write the U to the file
-        write_file << 0 << " ";
-        for (int i = 0; i < (nodes-2); i++) {
-            write_file << matrix_U2[i] << " ";
-        }
-        write_file << 0 << " ";
-        write_file << "\n";
-        write_file.flush();
-        matrix_U1 = matrix_U2;
-    }
-    write_file.close();
+    // write the data to file
+    write_files("test.dat", final_results, (time_steps+1), nodes);
 
-    delete[] initial_U;
-    delete[] matrix_U1;
+    // release the memory
     release_the_matrix(A);
-
+    release_the_matrix(matrix);
+    release_the_matrix(final_results);
     return 0;
 }
+
+/* --------------------------------------------------------------------------- */
+/*                               define functions                              */
+/* --------------------------------------------------------------------------- */
 
 double** create_a_matrix(int row, int column) {
     double **mat;
@@ -151,11 +150,11 @@ void release_the_matrix(double **mat) {
     delete[] mat;
 }
 
-void print_m_v(int size, double **mat)
+void print_m_v(int row, int col, double **mat)
 {
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < row; i++)
     {
-        for (int j = 0; j < size; j++)
+        for (int j = 0; j < col; j++)
         {
             std::cout << mat[i][j] << "\t";
         }
@@ -208,7 +207,7 @@ double** Cholesky_decomposition(int size, double **A)
     return L;
 }
 
-double* forward_substitution(int size, double **Cholesky, double *b)
+double* forward_substitution(int size, double **Cholesky, const double *b)
 {
     double *x;
     x = new double [size];
@@ -229,7 +228,7 @@ double* forward_substitution(int size, double **Cholesky, double *b)
     return x;
 }
 
-double* backward_substitution(int size, double **Cholesky, double *b)
+double* backward_substitution(int size, double **Cholesky, const double *b)
 {
     double *x;
     x = new double [size];
@@ -259,4 +258,17 @@ double* solve_linear_by_Cholesky(int size, double **A, double *b) {
     release_the_matrix(ch);
     delete[] fs;
     return bs;
+}
+
+void write_files(const std::string& name, double **mat, int row, int col) {
+    std::ofstream write_file(name);
+    assert(write_file.is_open());
+    for (int j = 0; j < row; j++) {
+        for (int i = 0; i < col; i++) {
+            write_file << mat[j][i] << " ";
+        }
+        write_file << "\n";
+//        write_file.flush();
+    }
+    write_file.close();
 }
