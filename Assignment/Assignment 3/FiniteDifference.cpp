@@ -15,10 +15,10 @@
 
 // create a matrix by the size of (row x column)
 double** create_a_matrix(int row, int column);
-
 // create a square matrix by the size of (row x row)
 double** create_a_matrix(int row);
 
+// create a tri-diagonal banded matrix of 'a b a'
 double** tri_banded_matrix(int size, double value_a, double value_b);
 
 // release the memory of a matrix
@@ -56,7 +56,7 @@ int main(int argc, char const *argv[])
     double b = (2*alpha*k)/pow(h, 2) + 1;
 
     double **A;
-    A = tri_banded_matrix(nodes, a, b);
+    A = tri_banded_matrix((nodes-2), a, b);
 
     double* initial_U;
     initial_U = new double [nodes];
@@ -78,15 +78,21 @@ int main(int argc, char const *argv[])
     write_initial.close();
 
     double *matrix_U1, *matrix_U2;
-    matrix_U1 = initial_U;
+    matrix_U1 = new double [nodes-2];
+    for (int i = 0; i < (nodes-1); i++)
+    {
+        matrix_U1[i] = initial_U[i+1];
+    }
 
     std::ofstream write_file("matrix.dat", std::ios::app);
     for (int j = 0; j < time_steps; j++) {
-        matrix_U2 = solve_linear_by_Cholesky(nodes, A, matrix_U1);
+        matrix_U2 = solve_linear_by_Cholesky((nodes-2), A, matrix_U1);
         // write the U to the file
-        for (int i = 0; i < nodes; i++) {
+        write_file << 0 << " ";
+        for (int i = 0; i < (nodes-2); i++) {
             write_file << matrix_U2[i] << " ";
         }
+        write_file << 0 << " ";
         write_file << "\n";
         write_file.flush();
         matrix_U1 = matrix_U2;
@@ -210,7 +216,6 @@ double* forward_substitution(int size, double **Cholesky, double *b)
     {
         if (i == 0) {
             x[i] = b[i] / Cholesky[i][i];
-//            x[i] = 0;
         }
         else {
             double sum = 0;
@@ -232,7 +237,6 @@ double* backward_substitution(int size, double **Cholesky, double *b)
     {
         if (i == (size - 1)) {
             x[i] = b[i] / Cholesky[i][i];
-//            x[i] = 0;
         }
         else {
             double sum = 0;
