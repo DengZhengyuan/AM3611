@@ -45,65 +45,108 @@ double* solve_linear_by_Cholesky(int size, double **A, double *b);
 
 void write_files(const std::string& name, double **mat, int row, int col);
 
-/* --------------------------------------------------------------------------- */
-/*                                main functions                               */
-/* --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------- */
+/*                              main functions                             */
+/* ----------------------------------------------------------------------- */
 
 int main(int argc, char const *argv[])
 {
-    const double PI = atan(1.0)*4;
+    const double PI = atan(1.0)*4.;
+    // chose the method
+    char char_judge;
+    std::cout << "Which method? \na. explicit \nb. implicit \n"
+              << "Please enter 'a' or 'b'. "
+              << std::endl;
+    std::cin >> char_judge;
+    // set the nodes and time steps
+    std::cout << "Please enter the number of nodes and time steps. \n"
+              << "For example, '101 50'."
+              <<std::endl;
+    int nodes;
+    int time_steps;
+    std::cin >> nodes >> time_steps;
 
-    int nodes = 101;
-    int time_steps = 50;
-    double time = 2;
-    double h = 1./(nodes-1.);
-    double k = time / (time_steps-1.);
-    double alpha = 1 / pow(PI, 2);
-    double a = - (alpha*k) / pow(h, 2);
-    double b = (2*alpha*k)/pow(h, 2) + 1;
+    // set other constants
+    const double time = 2;
+    const double h = 1./(nodes-1.);
+    const double k = time / (time_steps-1.);
+    const double alpha = 1. / pow(PI, 2);
 
-    double **A, **matrix;
-    A = tri_banded_matrix((nodes-2), a, b);
-    matrix = create_a_matrix((time_steps+1), (nodes-2));
-
-    // initial conditions
-    for (int i = 0; i < (nodes-2); i++) {
-            matrix[0][i] = (1 / pow(PI, 2)) * sin(PI*(i+1)*h);
-    }
-
-    // calculation
-    for (int i = 0; i < (time_steps+1); i++) {
-        matrix[i+1] = solve_linear_by_Cholesky((nodes-2), A, matrix[i]);
-    }
-
-    double **final_results;
+    // create the results matrix
+    double** final_results;
     final_results = create_a_matrix((time_steps+1), nodes);
-    for (int i = 0; i < (time_steps + 1); i++) {
-        for (int j = 0; j < nodes; j++) {
-            if (j == 0 || j == (nodes-1)) {
-                final_results[i][j] = 0;
-            }
-            else {
-                final_results[i][j] = matrix[i][j-1];
+
+    // implicit method
+    if (char_judge == 'b' || char_judge == 'B') {
+        double a = - (alpha*k) / pow(h, 2);
+        double b = (2*alpha*k)/pow(h, 2) + 1;
+        double **A;
+        A = tri_banded_matrix((nodes-2), a, b);
+        double** matrix;
+        matrix = create_a_matrix((time_steps+1), (nodes-2));
+
+        // initial conditions
+        for (int i = 0; i < (nodes-2); i++) {
+            matrix[0][i] = (1 / pow(PI, 2)) * sin(PI * (i + 1) * h);
+        }
+
+        // calculation
+        for (int i = 0; i < (time_steps+1); i++) {
+            matrix[i+1] = solve_linear_by_Cholesky((nodes-2), A, matrix[i]);
+        }
+        for (int i = 0; i < (time_steps + 1); i++) {
+            for (int j = 0; j < nodes; j++) {
+                if (j == 0 || j == (nodes-1)) {
+                    final_results[i][j] = 0;
+                }
+                else {
+                    final_results[i][j] = matrix[i][j-1];
+                }
             }
         }
-    }
-//    print_m_v(time_steps+1, nodes, final_results);
 
+        // release the memory
+        release_the_matrix(A);
+        release_the_matrix(matrix);
+    }
+    // explicit method
+    else if (char_judge == 'a' || char_judge == 'A') {
+        // boundary conditions
+        final_results[0][0] = 0;
+        final_results[0][nodes-1] = 0;
+
+        // initial conditions
+        for (int i = 1; i < (nodes-1); i++) {
+            final_results[0][i] = (1/pow(PI, 2)) * sin(PI*i*h);
+        }
+
+        // calculation
+        for (int i = 1; i < (time_steps+1); i++) {
+            // boundary conditions
+            final_results[i][0] = 0;
+            final_results[i][nodes-1] = 0;
+            for (int j = 1; j < (nodes-1); j++) {
+                final_results[i][j] =
+                        (alpha*k)/pow(h, 2)
+                        * (final_results[i-1][j+1]
+                        -2 * final_results[i-1][j]
+                        + final_results[i-1][j-1])
+                        + final_results[i-1][j];
+            }
+        }
+
+    }
 
     // write the data to file
-    write_files("test.dat", final_results, (time_steps+1), nodes);
+    write_files("not_cvg.dat", final_results, (time_steps+1), nodes);
 
-    // release the memory
-    release_the_matrix(A);
-    release_the_matrix(matrix);
     release_the_matrix(final_results);
     return 0;
 }
 
-/* --------------------------------------------------------------------------- */
-/*                               define functions                              */
-/* --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------- */
+/*                             define functions                            */
+/* ----------------------------------------------------------------------- */
 
 double** create_a_matrix(int row, int column) {
     double **mat;
