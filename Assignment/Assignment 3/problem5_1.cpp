@@ -4,7 +4,7 @@
     DATA:   Oct. 9, 2019
     PROB #: problem 5.1
     DESCRIPTION:
-            handle the pointers for matrix
+            change the variable value by function
     CMD:    g++ problem5_1.cpp -o problem5_1.out && ./problem5_1.out
 */
 #include <iostream>

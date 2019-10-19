@@ -4,7 +4,7 @@
     DATA:   Oct. 10, 2019
     PROB #: problem 5.5
     DESCRIPTION:
-            handle the pointers for matrix
+            calculate the multiply of matrix
     CMD:    g++ problem5_5.cpp -o problem5_5.out && ./problem5_5.out
 */
 

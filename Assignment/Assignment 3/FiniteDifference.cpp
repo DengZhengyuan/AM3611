@@ -43,6 +43,7 @@ double* backward_substitution(int size, double **Cholesky, const double *b);
 // And gives the final solutions of a linear system
 double* solve_linear_by_Cholesky(int size, double **A, double *b);
 
+// write the data in matrix into the 'name' file
 void write_files(const std::string& name, double **mat, int row, int col);
 
 /* ----------------------------------------------------------------------- */
@@ -138,7 +139,7 @@ int main(int argc, char const *argv[])
     }
 
     // write the data to file
-    write_files("not_cvg.dat", final_results, (time_steps+1), nodes);
+    write_files("matrix.dat", final_results, (time_steps+1), nodes);
 
     release_the_matrix(final_results);
     return 0;

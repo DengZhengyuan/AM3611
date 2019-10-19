@@ -4,7 +4,7 @@
     DATA:   Oct. 13, 2019
     PROB #: problem 5.7
     DESCRIPTION:
-            handle the pointers for matrix
+            calculate the p-norm
     CMD:    g++ problem5_7.cpp -o problem5_7.out && ./problem5_7.out
 */
 
@@ -20,7 +20,7 @@ int main(int argc, char const *argv[])
     std::ifstream read_file("value_p_norm.dat");
     assert(read_file.is_open());
     double *A;
-    A = new double [1];
+    A = new double [100];
     int length_of_data = 0;
     while (!read_file.eof()) {
         read_file >> A[length_of_data];

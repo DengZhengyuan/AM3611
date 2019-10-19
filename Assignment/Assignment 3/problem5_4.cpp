@@ -4,7 +4,7 @@
     DATA:   Oct. 10, 2019
     PROB #: problem 5.4
     DESCRIPTION: 
-            test the if statement
+            calculate the standard deviation
     CMD:    g++ problem5_4.cpp -o problem5_4.out && ./problem5_4.out
 */
 
