@@ -6,7 +6,6 @@
     DESCRIPTION:
             extend the ComplexNumber class
             the source code file
-    CMD:    g++ problem5_7.cpp -o problem5_7.out && ./problem5_7.out
 */
 
 #include "ComplexNumber.h"

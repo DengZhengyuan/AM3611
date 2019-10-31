@@ -6,7 +6,6 @@
     DESCRIPTION:
             extend the ComplexNumber class
             the header file
-    CMD:    g++ problem5_7.cpp -o problem5_7.out && ./problem5_7.out
 */
 
 #ifndef COMPLEXNUMBERHEADERDEF
@@ -19,6 +18,8 @@ class ComplexNumber
 private:
     double mRealPart{};
     double mImaginaryPart{};
+    // if you cannot compile here,
+    // please remove '{}'
 public:
     explicit ComplexNumber(double x = 0, double y = 0);
     double CalculateModulus() const;
