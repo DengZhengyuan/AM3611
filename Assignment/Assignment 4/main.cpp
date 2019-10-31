@@ -57,7 +57,7 @@ int main(int argc, char * argv[])
     std::cout << "\n6.1 (f). \nCalculate the conjugate with void return: "
               << z1
               << ". \n";
-    
+
     /*--------------- Test Class matrix --------------*/
     matrix mat_A;
     std::cout << "\n6.2 (a). \n"
@@ -84,10 +84,10 @@ int main(int argc, char * argv[])
               << "The inverse of mat_B is: \n";
     mat_B.inverse().print_matrix();
 
-    matrix mat_C;
-    mat_C = mat_B;
     std::cout << "\n6.2 (h). \n"
               << "Let mat_C '=' mat_B: \n";
+    matrix mat_C;
+    mat_C = mat_B;
     mat_C.print_matrix();
 
     std::cout << "\n6.2 (i). \n"

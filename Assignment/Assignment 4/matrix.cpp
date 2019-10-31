@@ -21,12 +21,14 @@ matrix::matrix(double a00, double a01, double a10, double a11) {
     mat[0][1] = a01;
     mat[1][0] = a10;
     mat[1][1] = a11;
+    std::cout << "***The matrix has been made.\n";
 }
 // destructor
 matrix::~matrix() {
     delete[] mat[0];
     delete[] mat[1];
     delete[] mat;
+    std::cout << "***The matrix has been deleted.\n";
 }
 
 // print the matrix
