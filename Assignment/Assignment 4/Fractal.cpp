@@ -1,6 +1,12 @@
-//
-// Created by Zhengyuan Deng on 2019/10/31.
-//
+/*
+    NAME:   Zhengyuan Deng
+    STU #:  251006745
+    DATA:   Oct. 30, 2019
+    PROB #: Assignment 4 Part B
+    DESCRIPTION:
+            class Fractal
+            the source code file
+*/
 
 #include "Fractal.h"
 
@@ -29,6 +35,7 @@ Fractal::~Fractal() {
         delete[] matrix[i];
     }
     delete[] matrix;
+    std::cout << "***The matrix has been deleted.\n";
 }
 
 // reset the real value domain
@@ -75,20 +82,20 @@ void Fractal::Julia_set(const ComplexNumber& c, int max_iter) {
     }
 }
 
-//void Fractal::Mandalbrot_set(const ComplexNumber& c, int max_iter) {
-//    double real_part = 0.;
-//    double imag_part = 0.;
-//
-//    for (int i = 0; i < m_nrows; i++) {
-//        for (int j = 0; j < m_ncols; j++) {
-//            ComplexNumber z(real_part, imag_part);
-//            matrix[i][j] = iterate_times(z, c, max_iter);
-//            real_part += distance_real_axis();
-//        }
-//        imag_part -= distance_imag_axis();
-//        real_part = 0.;
-//    }
-//}
+void Fractal::Mandalbrot_set(int max_iter) {
+    ComplexNumber z;
+    double real_part = m_minReal;
+    double imag_part = m_maxImag;
+    for (int i = 0; i < m_nrows; i++) {
+        for (int j = 0; j < m_ncols; j++) {
+            ComplexNumber c(real_part, imag_part);
+            matrix[i][j] = iterate_times(z, c, max_iter);
+            real_part += distance_real_axis();
+        }
+        imag_part -= distance_imag_axis();
+        real_part = m_minReal;
+    }
+}
 
 void Fractal::print_fractal() {
     for (int i = 0; i < m_nrows; i++) {
@@ -102,4 +109,16 @@ void Fractal::print_fractal() {
         }
         std::cout << "\n";
     }
+}
+
+void Fractal::write_file_fractal(const std::string& name) {
+    std::ofstream write_file(name);
+    assert(write_file.is_open());
+    for (int j = 0; j < m_nrows; j++) {
+        for (int i = 0; i < m_ncols; i++) {
+            write_file << matrix[j][i] << " ";
+        }
+        write_file << "\n";
+    }
+    write_file.close();
 }

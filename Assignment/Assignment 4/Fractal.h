@@ -1,12 +1,21 @@
-//
-// Created by Zhengyuan Deng on 2019/10/31.
-//
+/*
+    NAME:   Zhengyuan Deng
+    STU #:  251006745
+    DATA:   Oct. 30, 2019
+    PROB #: Assignment 4 Part B
+    DESCRIPTION:
+            class Fractal
+            header file
+*/
+
 
 #ifndef TEST_BY_CLION_2_FRACTAL_H
 #define TEST_BY_CLION_2_FRACTAL_H
 
 #include <iostream>
 #include <cmath>
+#include <fstream>
+#include <string>
 #include "ComplexNumber.h"
 
 class Fractal {
@@ -32,8 +41,9 @@ public:
     double distance_imag_axis();
     static int iterate_times(ComplexNumber z, const ComplexNumber& C, int max_iteration);
     void Julia_set(const ComplexNumber& c, int max_iter = 80);
+    void Mandalbrot_set(int max_iter = 80);
     void print_fractal();
-//    void Mandalbrot_set(const ComplexNumber &c, int max_iter = 80);
+    void write_file_fractal(const std::string& name);
 };
 
 
