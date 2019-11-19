@@ -71,8 +71,9 @@
 			"fstream": "cpp"
 		},
 		"editor.fontLigatures": true,
-		"editor.fontFamily": "Fira Code, Menlo, Monaco, 'Courier New', monospace",
+		"editor.fontFamily": "Source Code Pro, Fira Code, Menlo, Monaco, 'Courier New', monospace",
 		"editor.fontSize": 14,
-		"editor.wordWrap": "bounded"
+		"editor.wordWrap": "bounded",
+		"editor.fontWeight": "600"
 	}
 }
