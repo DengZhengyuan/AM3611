@@ -31,7 +31,7 @@ public:
     friend std::ostream& operator<<(std::ostream& output, const ComplexNumber& z);
 };
 
-double CNModulus(const ComplexNumber &x);
+double abs_value(const ComplexNumber &x);
 
 #endif // COMPLEXNUMBERHEADERDEF
 

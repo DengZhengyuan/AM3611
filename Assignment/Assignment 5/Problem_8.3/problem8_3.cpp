@@ -4,15 +4,23 @@
     DATA:   Nov. 20, 2019
     PROB #: problem 8.3
     DESCRIPTION:
-            template for different type list
-    CMD：
-            g++ problem8_3.cpp -o problem8_3.out && ./problem8_3.out
+            template to different type list
+    CMD:
+            g++ -std=c++11 problem8_3.cpp -o problem8_3.out && ./problem8_3.out
 */
 
 #include <iostream>
 #include <cmath>
 #include "ComplexNumber.h"
 // #include "List.h"
+
+template <typename type>
+type abs_value(type value)
+{
+    if (value >= static_cast<type>(0))
+        return value;
+    return -value;
+}
 
 template <typename type>
 class List
@@ -23,7 +31,7 @@ private:
 
 public:
     // constractor
-    List(int length) : m_length(length), m_vector(new type[length]) {}
+    explicit List(int length) : m_length(length), m_vector(new type[length]) {}
 
     // destractor
     ~List() {
@@ -51,22 +59,12 @@ public:
         return result;
     }
 
-    // calculate the p norm for complex number
-    double cn_pNorm(double p = 2.0) const {
-        double sum = 0.;
-        for (int i = 0; i < m_length; i++)
-        {
-            sum += std::pow(CNModulus(m_vector[i]), p);
-        }
-        return std::pow(sum, 1./p);
-    }
-
     // calculate the p norm
     double pNorm(double p = 2.0) const {
         double sum = 0.;
         for (int i = 0; i < m_length; i++)
         {
-            sum += std::pow(abs(m_vector[i]), p);
+            sum += std::pow(abs_value(m_vector[i]), p);
         }
         return std::pow(sum, 1./p);
     }
@@ -119,8 +117,8 @@ main(int argc, char *argv[])
 
     std::cout << "List double : " << test3 << std::endl;
     std::cout << "sum: " << test3.sum() << std::endl;
-    std::cout << "2-norm: " << test3.cn_pNorm() << std::endl;
-    std::cout << "5-norm: " << test3.cn_pNorm(5.) << std::endl;
+    std::cout << "2-norm: " << test3.pNorm() << std::endl;
+    std::cout << "5-norm: " << test3.pNorm(5.) << std::endl;
 
     return 0;
 }

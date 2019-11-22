@@ -108,7 +108,7 @@ std::ostream& operator<<(std::ostream& output, const ComplexNumber& z)
     return output;
 }
 
-double CNModulus(const ComplexNumber &x)
+double abs_value(const ComplexNumber &x)
 {
     return x.CalculateModulus();
 }
