@@ -1,3 +1,14 @@
+/*
+    NAME:   Zhengyuan Deng
+    STU #:  251006745
+    DATA:   Nov. 21, 2019
+    PROB #: Assignment 5 Part B
+    DESCRIPTION:
+            quadrature method
+    CMD:
+            g++ -std=c++11 -Wall -O -c Quadrature.cpp && g++ -std=c++11 -Wall -O -c LeftRiemann.cpp && g++ -std=c++11 -Wall -O -c RightRiemann.cpp && g++ -std=c++11 -Wall -O -c Midpoint.cpp && g++ -std=c++11 -Wall -O -c Trapezoid.cpp && g++ -std=c++11 -Wall -O -c Simpsons.cpp && g++ -std=c++11 -Wall -lm -O -o main_Quadrature.out main_Quadrature.cpp Quadrature.o LeftRiemann.o RightRiemann.o Midpoint.o Trapezoid.o Simpsons.o && ./main_Quadrature.out
+*/
+
 #include <iostream>
 #include <fstream>
 #include <cmath>
@@ -27,7 +38,7 @@ int main(int argc, char * argv[]) {
     exact_result_1 = 2*exp(2) + 38*exp(-2);
     exact_result_2 = erf(1);
 
-    std::fstream write_head("result_1.dat");
+    std::ofstream write_head("result_1.dat");
     assert(write_head.is_open());
     write_head << "N err_left err_right err_midpoint "
                   "err_trapezoid err_Simpsons"
@@ -43,7 +54,7 @@ int main(int argc, char * argv[]) {
                       2);
     }
 
-    std::fstream write_head_2("result_2.dat");
+    std::ofstream write_head_2("result_2.dat");
     assert(write_head_2.is_open());
     write_head_2 << "N err_left err_right err_midpoint "
                     "err_trapezoid err_Simpsons"

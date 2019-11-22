@@ -27,5 +27,5 @@ double Simpsons::integral() {
     return (h/3)*(
             fa + fb
             + 2*sum((m_N/2-1), vec_f)
-            + 4*sum((m_N/2), vec_f));
+            + 4*sum((m_N/2), vec_f2));
 }
